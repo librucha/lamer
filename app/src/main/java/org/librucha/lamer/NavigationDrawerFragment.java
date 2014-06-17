@@ -94,6 +94,8 @@ public class NavigationDrawerFragment extends Fragment {
 					getString(R.string.title_newest),
 					getString(R.string.title_best),
 					getString(R.string.title_random),
+					getString(R.string.title_all),
+					getString(R.string.title_queue)
 			}
 	));
 	mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);

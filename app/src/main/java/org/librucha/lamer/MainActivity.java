@@ -1,6 +1,7 @@
 package org.librucha.lamer;
 
 import android.app.*;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.*;
@@ -53,6 +54,12 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	  case 3:
 		mTitle = getString(R.string.title_random);
 		break;
+	  case 4:
+		mTitle = getString(R.string.title_all);
+		break;
+	  case 5:
+		mTitle = getString(R.string.title_queue);
+		break;
 	}
 	Toast.makeText(this, mTitle, Toast.LENGTH_SHORT).show();
   }
@@ -87,6 +94,11 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	  return true;
 	}
 	return super.onOptionsItemSelected(item);
+  }
+
+  public void openSettings(MenuItem item) {
+	Intent intent = new Intent(this, SettingsActivity.class);
+	startActivity(intent);
   }
 
   /**
