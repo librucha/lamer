@@ -1,2 +1,1 @@
-lamer
-=====
+Android offline reader for pages http://lamer.cz

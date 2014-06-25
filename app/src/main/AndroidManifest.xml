@@ -21,10 +21,6 @@
 				android:label="@string/title_activity_settings">
 		</activity>
 
-		<service
-				android:name=".QuoteService"
-				android:exported="false">
-		</service>
 	</application>
 
 </manifest>
