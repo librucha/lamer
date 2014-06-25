@@ -1,17 +1,22 @@
 package org.librucha.lamer;
 
-import android.app.*;
+import android.app.ActionBar;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.view.*;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+import org.librucha.lamer.domain.Quote;
+import org.librucha.lamer.navigation.PlaceholderFragment;
+import org.librucha.lamer.pagging.SectionsPagerAdapter;
+import org.librucha.lamer.storage.DatabaseHelper;
 
-import java.util.Locale;
+import java.util.List;
 
 public class MainActivity extends FragmentActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -40,11 +45,17 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerFr
 	navigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
 	// Create the adapter that will return a fragment for each of the primary sections of the activity.
-	sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+	sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
 	// Set up the ViewPager with the sections adapter.
 	viewPager = (ViewPager) findViewById(R.id.pager);
 	viewPager.setAdapter(sectionsPagerAdapter);
+
+	DatabaseHelper helper = new DatabaseHelper(this);
+	RuntimeExceptionDao<Quote, Integer> quoteDataDao = helper.getQuoteDataDao();
+	List<Quote> quotes = quoteDataDao.queryForAll();
+	System.out.println(quotes);
+	helper.close();
   }
 
   @Override
@@ -112,100 +123,5 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerFr
   public void openSettings(MenuItem item) {
 	Intent intent = new Intent(this, SettingsActivity.class);
 	startActivity(intent);
-  }
-
-  /**
-   * A placeholder fragment containing a simple view.
-   */
-  public static class PlaceholderFragment extends Fragment {
-	/**
-	 * The fragment argument representing the section number for this
-	 * fragment.
-	 */
-	private static final String ARG_SECTION_NUMBER = "section_number";
-
-	/**
-	 * Returns a new instance of this fragment for the given section
-	 * number.
-	 */
-	public static PlaceholderFragment newInstance(int sectionNumber) {
-	  PlaceholderFragment fragment = new PlaceholderFragment();
-	  Bundle args = new Bundle();
-	  args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-	  fragment.setArguments(args);
-	  return fragment;
-	}
-
-	public PlaceholderFragment() {
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-	  View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-	  return rootView;
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-	  super.onAttach(activity);
-	  ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
-	}
-  }
-
-  /**
-   * A {@link android.support.v13.app.FragmentPagerAdapter} that returns a fragment corresponding to
-   * one of the sections/tabs/pages.
-   */
-  public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
-
-	public SectionsPagerAdapter(android.support.v4.app.FragmentManager fm) {
-	  super(fm);
-	}
-
-	@Override
-	public android.support.v4.app.Fragment getItem(int position) {
-	  // getItem is called to instantiate the fragment for the given page.
-	  // Return a PlaceholderFragment (defined as a static inner class below).
-	  return QuoteFragment.newInstance(position + 1);
-	}
-
-	@Override
-	public int getCount() {
-	  return 100;
-	}
-
-	@Override
-	public CharSequence getPageTitle(int position) {
-	  Locale l = Locale.getDefault();
-	  return getString(R.string.title_section, position).toUpperCase(l);
-	}
-  }
-
-  public static class QuoteFragment extends android.support.v4.app.Fragment {
-	/**
-	 * The fragment argument representing the section number for this fragment.
-	 */
-	private static final String ARG_SECTION_NUMBER = "section_number";
-
-	/**
-	 * Returns a new instance of this fragment for the given section number.
-	 */
-	public static QuoteFragment newInstance(int sectionNumber) {
-	  QuoteFragment fragment = new QuoteFragment();
-	  Bundle args = new Bundle();
-	  args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-	  fragment.setArguments(args);
-	  return fragment;
-	}
-
-	public QuoteFragment() {
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-	  View rootView = inflater.inflate(R.layout.fragment_quote, container, false);
-	  ((TextView) rootView.findViewById(R.id.quoteText)).setText(getString(R.string.title_section, getArguments().getInt(ARG_SECTION_NUMBER)));
-	  return rootView;
-	}
   }
 }

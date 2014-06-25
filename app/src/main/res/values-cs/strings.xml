@@ -1,5 +1,13 @@
 <resources>
 
     <string name="title_all">Všechny</string>
+	<string name="action_settings">Nastavení</string>
+	<string name="navigation_drawer_close">Zavřít navigaci</string>
+	<string name="navigation_drawer_open">Otevřít navigaci</string>
+	<string name="title_best">Nejlepší</string>
+	<string name="title_newest">Nejnovější</string>
+	<string name="title_queue">Fronta</string>
+	<string name="title_random">Náhodné</string>
+	<string name="title_section">Hláška #%s</string>
 
 </resources>
