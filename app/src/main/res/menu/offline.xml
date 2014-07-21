@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.librucha.lamer.OfflineActivity" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="org.librucha.lamer.OfflineActivity">
+	<item android:id="@+id/progress_bar"
+	      android:title="@string/action_progress_bar"
+	      android:icon="@android:drawable/progress_indeterminate_horizontal"
+	      android:showAsAction="ifRoom"/>
 </menu>

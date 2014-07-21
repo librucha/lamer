@@ -17,14 +17,8 @@ import org.librucha.lamer.pagging.SectionsPagerAdapter;
 
 public class MainActivity extends FragmentActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-  /**
-   * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-   */
   private NavigationDrawerFragment navigationDrawerFragment;
 
-  /**
-   * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-   */
   private CharSequence lastTitle;
 
   private SectionsPagerAdapter sectionsPagerAdapter;
@@ -111,9 +105,6 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerFr
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-	// Handle action bar item clicks here. The action bar will
-	// automatically handle clicks on the Home/Up button, so long
-	// as you specify a parent activity in AndroidManifest.xml.
 	int id = item.getItemId();
 	if (id == R.id.action_settings) {
 	  return true;

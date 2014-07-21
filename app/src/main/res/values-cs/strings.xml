@@ -10,5 +10,8 @@
 	<string name="title_random">Náhodné</string>
 	<string name="title_section">Hláška #%s</string>
 	<string name="title_home">Domů</string>
+	<string name="sync_button_label">Stáhnout vše</string>
+	<string name="quotes_count_label">Počet hlášek</string>
+	<string name="quotes_size_label">Velikost hlášek</string>
 
 </resources>
