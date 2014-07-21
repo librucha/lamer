@@ -1,4 +1,4 @@
-package org.librucha.lamer;
+package org.librucha.lamer.navigation;
 
 import android.app.*;
 import android.content.SharedPreferences;
@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.*;
 import android.widget.*;
+import org.librucha.lamer.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -91,6 +92,7 @@ public class NavigationDrawerFragment extends Fragment {
 			android.R.layout.simple_list_item_activated_1,
 			android.R.id.text1,
 			new String[]{
+					getString(R.string.title_home),
 					getString(R.string.title_newest),
 					getString(R.string.title_best),
 					getString(R.string.title_random),

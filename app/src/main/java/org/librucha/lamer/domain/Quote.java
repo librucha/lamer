@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "quote")
 public class Quote {
 
-  @DatabaseField(columnName = "id", generatedId = true, canBeNull = false)
+  @DatabaseField(columnName = "id", canBeNull = false, id = true)
   private Integer id;
   @DatabaseField(columnName = "text", canBeNull = false)
   private String text;

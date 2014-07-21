@@ -4,19 +4,16 @@ import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
-import org.librucha.lamer.domain.Quote;
-import org.librucha.lamer.navigation.PlaceholderFragment;
+import org.librucha.lamer.navigation.MainFragment;
+import org.librucha.lamer.navigation.NavigationDrawerFragment;
 import org.librucha.lamer.pagging.SectionsPagerAdapter;
-import org.librucha.lamer.storage.DatabaseHelper;
-
-import java.util.List;
 
 public class MainActivity extends FragmentActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -35,6 +32,16 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerFr
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+	StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+			.detectAll()
+			.penaltyLog()
+			.build());
+	StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+			.detectAll()
+			.penaltyLog()
+			.penaltyDeath()
+			.build());
+
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_main);
 
@@ -50,12 +57,6 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerFr
 	// Set up the ViewPager with the sections adapter.
 	viewPager = (ViewPager) findViewById(R.id.pager);
 	viewPager.setAdapter(sectionsPagerAdapter);
-
-	DatabaseHelper helper = new DatabaseHelper(this);
-	RuntimeExceptionDao<Quote, Integer> quoteDataDao = helper.getQuoteDataDao();
-	List<Quote> quotes = quoteDataDao.queryForAll();
-	System.out.println(quotes);
-	helper.close();
   }
 
   @Override
@@ -63,12 +64,15 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerFr
 	// update the main content by replacing fragments
 	FragmentManager fragmentManager = getFragmentManager();
 	fragmentManager.beginTransaction()
-			.replace(R.id.pager, PlaceholderFragment.newInstance(position + 1))
+			.replace(R.id.pager, MainFragment.newInstance(position))
 			.commit();
   }
 
   public void onSectionAttached(int number) {
 	switch (number) {
+	  case 0:
+		lastTitle = getString(R.string.title_home);
+		break;
 	  case 1:
 		lastTitle = getString(R.string.title_newest);
 		break;
@@ -98,9 +102,6 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerFr
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
 	if (!navigationDrawerFragment.isDrawerOpen()) {
-	  // Only show items in the action bar relevant to this screen
-	  // if the drawer is not showing. Otherwise, let the drawer
-	  // decide what to show in the action bar.
 	  getMenuInflater().inflate(R.menu.main, menu);
 	  restoreActionBar();
 	  return true;
@@ -122,6 +123,11 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerFr
 
   public void openSettings(MenuItem item) {
 	Intent intent = new Intent(this, SettingsActivity.class);
+	startActivity(intent);
+  }
+
+  public void openOffline(MenuItem item) {
+	Intent intent = new Intent(this, OfflineActivity.class);
 	startActivity(intent);
   }
 }

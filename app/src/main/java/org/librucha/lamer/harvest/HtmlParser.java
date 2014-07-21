@@ -5,43 +5,57 @@ import org.librucha.lamer.domain.Quote;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static java.lang.String.format;
 
 public class HtmlParser {
 
   private HtmlParser() {
   }
 
-  public Map<Integer, Quote> parseHtml(String url) throws IOException {
+  public void getIndex() throws IOException {
+	Set<Integer> quoteIds = new TreeSet<Integer>();
+	getOnePageIndex(quoteIds, "http://www.lamer.cz/quote/latest/", 1);
+  }
 
-	URL source = new URL(url);
-	Map<Integer, Quote> quotes = new HashMap<Integer, Quote>(10);
+  private void getOnePageIndex(Set<Integer> quoteIds, String url, int pageNumber) throws IOException {
+	URL source = new URL(url + pageNumber);
+	TagNode page = new HtmlCleaner(createProperties()).clean(source);
+	List<TagNode> quotes = new ArrayList<TagNode>(10);
+	quotes.add(page.findElementByAttValue("class", "quote first", true, false));
+	quotes.addAll(page.getElementListByAttValue("class", "quote", true, false));
+	for (TagNode quoteDiv : quotes) {
+	  quoteIds.add(getQuoteId(quoteDiv));
+	}
+	TagNode next = page.findElementByAttValue("rel", "next", true, false);
+	if (next != null) {
+	  String href = next.getAttributeByName("href");
+	  int nextPageNumber = Integer.valueOf(href.substring(href.lastIndexOf("/") + 1));
+	  getOnePageIndex(quoteIds, url, nextPageNumber);
+	}
+  }
 
+  public Quote parseOneQuote(int quoteNumber) {
+	try {
+	  URL source = new URL("http://www.lamer.cz/quote/" + quoteNumber);
+	  TagNode page = new HtmlCleaner(createProperties()).clean(source);
+	  TagNode quoteDiv = page.findElementByAttValue("class", "quote", true, false);
+	  int id = getQuoteId(quoteDiv);
+	  String text = getQuoteText(quoteDiv);
+	  return new Quote(id, text);
+	} catch (IOException e) {
+	  throw new RuntimeException(format("Error during parse quote number %s", quoteNumber));
+	}
+  }
+
+  private CleanerProperties createProperties() {
 	CleanerProperties props = new CleanerProperties();
 	props.setTranslateSpecialEntities(true);
 	props.setTransResCharsToNCR(true);
 	props.setOmitComments(true);
 
-	TagNode page = new HtmlCleaner(props).clean(source);
-	TagNode[] quotesDiv = page.getElementsByAttValue("id", "quotes", true, false);
-	TagNode[] quoteDivs = quotesDiv[0].getElementsByName("div", false);
-	for (TagNode quoteDiv : quoteDivs) {
-	  if (!"square".equals(quoteDiv.getAttributeByName("class"))) {
-		int quoteId = getQuoteId(quoteDiv);
-		String text = getQuoteText(quoteDiv);
-
-		Quote quote = new Quote(quoteId, text);
-		quotes.put(quoteId, quote);
-	  }
-	}
-
-	return quotes;
-  }
-
-  public int getLastQuote(String url) {
-	// TODO Implemetnt it!
-	return 72392;
+	return props;
   }
 
   private int getQuoteId(TagNode quoteDiv) {
@@ -55,7 +69,6 @@ public class HtmlParser {
   }
 
   private static class SingletonHolder {
-
 	public static final HtmlParser INSTANCE = new HtmlParser();
   }
 

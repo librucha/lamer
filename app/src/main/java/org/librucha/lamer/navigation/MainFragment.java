@@ -10,7 +10,7 @@ import org.librucha.lamer.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends Fragment {
+public class MainFragment extends Fragment {
   /**
    * The fragment argument representing the section number for this
    * fragment.
@@ -21,15 +21,15 @@ public class PlaceholderFragment extends Fragment {
    * Returns a new instance of this fragment for the given section
    * number.
    */
-  public static PlaceholderFragment newInstance(int sectionNumber) {
-	PlaceholderFragment fragment = new PlaceholderFragment();
+  public static MainFragment newInstance(int sectionNumber) {
+	MainFragment fragment = new MainFragment();
 	Bundle args = new Bundle();
 	args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 	fragment.setArguments(args);
 	return fragment;
   }
 
-  public PlaceholderFragment() {
+  public MainFragment() {
   }
 
   @Override

@@ -3,10 +3,9 @@ package org.librucha.lamer.pagging;
 import android.app.Activity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import org.librucha.lamer.R;
+import org.librucha.lamer.home.HomeFragment;
 import org.librucha.lamer.quote.QuoteFragment;
-import org.librucha.lamer.storage.QuoteRegister;
-
-import java.util.Locale;
+import org.librucha.lamer.storage.QuoteRepository;
 
 /**
  * A {@link android.support.v13.app.FragmentPagerAdapter} that returns a fragment corresponding to
@@ -23,17 +22,22 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
   @Override
   public android.support.v4.app.Fragment getItem(int position) {
-	return QuoteFragment.newInstance(position);
+	if (position == 0) {
+	  return HomeFragment.newInstance();
+	}
+	return QuoteFragment.newInstance(position + 1);
   }
 
   @Override
   public int getCount() {
-	return QuoteRegister.getInstance().getQuotesCount();
+	return QuoteRepository.getInstance(activity).getQuotesCount();
   }
 
   @Override
   public CharSequence getPageTitle(int position) {
-	Locale l = Locale.getDefault();
-	return activity.getString(R.string.title_section, QuoteRegister.getInstance().getQuote(position).getId()).toUpperCase(l);
+	if (position == 0) {
+	  return activity.getString(R.string.title_home);
+	}
+	return activity.getString(R.string.title_section, QuoteRepository.getInstance(activity).getQuote(position + 1).getId());
   }
 }
